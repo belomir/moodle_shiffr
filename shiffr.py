@@ -25,23 +25,26 @@ def index(let: str) -> int:
 
 def slide(mes: str, key: int = 0) -> str:
     lis = itslist(mes)
+    if lis==None: return mes
     le = len(lis)
     key %= le
     return "".join(map(lambda l: lis[(lis.index(l)+key)%le] if l in lis else l, mes))
 
 def cesar(mes: str, key: int = 1, mode="encode") -> str:
-    if mode=="encode":
-        return slide(mes, key)
-    else:
-        return slide(mes, -key)
+    return slide(mes, key * (1 if mode=="encode" else -1))
 
 def vigener(mes: str, key: str, mode="encode") -> str:
-    if mode=="encode":
-        return "".join(map(lambda p: slide(p[0], index(p[1])), zip(mes, key*(len(mes)//len(key)+1))))
-    else:
-        return "".join(map(lambda p: slide(p[0], -index(p[1])), zip(mes, key*(len(mes)//len(key)+1))))
+    spaces = list()
+    for i in range(mes.count(' ')):
+        spaces.append(mes.index(" ", 0 if len(spaces)==0 else spaces[-1]+1))
+    mes = mes.replace(' ', '')
+    res = list(map(lambda p: slide(p[0], index(p[1]) * (1 if mode=="encode" else -1)), zip(mes, key*(len(mes)//len(key)+1))))
+    for i in spaces:
+        res.insert(i, ' ')
+    return "".join(res)
 
 init()
-#print(viginer("привет", "ши"))
+#print(vigener("привет тебе от всех нас", "ши"))
+#print(vigener("зщбкэы ыэйэ", "ши", "decode"))
 #print(vigener("зщбкэы", "ши", "decode"))
 #print(cesar("фхнжйч", 5, "decode"))
