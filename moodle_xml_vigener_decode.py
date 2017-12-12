@@ -23,11 +23,10 @@ for line in ifile:
                 alph = lat
             else:
                 alph = cyr
-            message = message.replace(' ', '')#list(filter(lambda l: l!=' ', message))
+            message = message.replace(' ', '')
             key_str = (key*(len(message)//len(key)+1))[:len(message)]
             hint1 = "{message}\n{key}".format(message=message, key=key_str)
-            keys = [alph.index(l) for l in key]
-            #hint2 = "{hint}\n{arrows}\n{key}".format(hint="".join("{:>{n}}".format(l, n=1 if l=="\n" else 3) for l in hint1), arrows="".join(arrows), key="".join("{:>3}".format(l) for l in key))
+            keys = [-alph.index(l) for l in key]
             hint2 = "\n".join("{}: {}".format(k, n)for k,n in zip(key, keys))
             ofile.write("    <hint format=\"html\"><text><![CDATA[\n")
             ofile.write("<pre>{hint}</pre>\n".format(hint=hint1))
@@ -35,9 +34,9 @@ for line in ifile:
             ofile.write("    <hint format=\"html\"><text><![CDATA[\n")
             ofile.write("<pre>{hint}</pre>\n".format(hint=hint2))
             ofile.write("    ]]></text></hint>\n")
-            hint3 = "    {alph}".format(alph=alph)
+            hint3 = "     {alph}".format(alph=alph)
             for k in sorted(set(keys)):
-                hint3 += "\n{key:>3}:{alph}".format(key=k,alph=alph[k:]+alph[:k])
+                hint3 += "\n{key:>3}: {alph}".format(key=k,alph=alph[k:]+alph[:k])
             ofile.write("    <hint format=\"html\"><text><![CDATA[\n")
             ofile.write("<pre>{hint}</pre>\n".format(hint=hint3))
             ofile.write("    ]]></text></hint>\n")
